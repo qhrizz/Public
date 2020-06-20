@@ -1,0 +1,17 @@
+#Since Ubuntu 18.04 netplan was introduced for network management. Setting a static IP is now done via a yaml file
+#Default config is /etc/netplan/50-cloud-init.yaml
+#This is a samplefile to set a static IP
+#Save the file and run sudo netplan apply
+network:
+    ethernets:
+        ens160:
+            addresses:
+            - 10.0.0.2/24
+            gateway4: 10.0.0.1
+            nameservers:
+                addresses:
+                - 1.1.1.1
+                - 8.8.8.8
+                search: []
+            optional: true
+    version: 2
