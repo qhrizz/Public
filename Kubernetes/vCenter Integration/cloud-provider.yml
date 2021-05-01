@@ -1,0 +1,29 @@
+# Under rancher_kubernetes_engine_config: 
+# Make sure this idented to the same level as for example authentication and bastion_host
+# A more written example can be found at https://christiantamm.se/books/guides-03a/page/create-cluster-with-vmware-storage-provider
+  cloud_provider:
+    name: vsphere
+    vsphereCloudProvider:
+      disk:
+        scsicontrollertype: pvscsi
+      global:
+        insecure-flag: true
+        soap-roundtrip-count: 0
+      network: {}
+      virtual_center:
+      # Enter IP or FQDN to vCenter
+        10.130.140.26:
+          datacenters: /QNet
+          port: '443'
+          soap-roundtrip-count: 0
+          # Enter username for the vsphere user with permissions to deploy/create machines
+          user: myServiceAccount@vsphere.local
+          password: 'MyPassWord'
+      workspace:
+        datacenter: /QNet
+        # Enter path to default datastore
+        default-datastore: /QNet/datastore/datastore_01
+        # Enter folder where the nodes VM will be stored
+        folder: /QNet/vm/K8
+        resourcepool-path: /QNet/resources
+        server: 10.130.140.26

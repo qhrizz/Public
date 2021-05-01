@@ -1,0 +1,22 @@
+# Example traefik-configmap 
+# Creates a middleware called security-headers
+# Creates it in kube-system
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-config
+  namespace: kube-system
+data:
+  traefik-config.yaml: |
+    http:
+      middlewares:
+        security-headers:
+          headers:
+            sslRedirect: true
+            browserXssFilter: true
+            contentTypeNosniff: true
+            forceSTSHeader: true
+            stsIncludeSubdomains: true
+            stsPreload: true
+            stsSeconds: 315360000
