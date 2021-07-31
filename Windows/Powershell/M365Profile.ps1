@@ -3,7 +3,7 @@ Write-Host "Loading Microsoft 365 profile from qhrizz's Github" -Foregroundcolor
 Write-Host "Provided as is..."
 Write-Host "---------------------"
 
-Write-Host "Available functions are: " 
+Write-Host "Available functions are (list again with Get-Functions)" 
 # Hashtable to populate available functions
 $availableFunctions = @{
 "Install-M365Modules" = "Installs require modules"

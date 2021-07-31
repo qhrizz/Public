@@ -4,6 +4,21 @@ Write-Host "Provided as is..."
 Write-Host '¯\_(ツ)_/¯'
 Write-Host "---------------------"
 
+Write-Host "Available functions are (list again with Get-Functions)" 
+# Hashtable to populate available functions
+$availableFunctions = @{
+"Invoke-Hello" = "Mock function to test if the profile was loaded"
+"Invoke-M365Profile" = "Load functions to install and connect to M365"
+"WhatsMyIP" = "Check current WAN address using Amazon"
+"gimme" = "List last used commands"
+}
+$availableFunctions
+
+# List available functions again
+Function Get-Functions {
+    $availableFunctions
+}
+
 
 # Set oh-my-posh theme
 Import-Module posh-git
