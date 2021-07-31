@@ -1,4 +1,4 @@
-# This is my Powershell profile
+# This is my Powershell profile hosted at Github
 Write-Host "Loading powershell profile from qhrizz's Github" -Foregroundcolor Green
 Write-Host "Provided as is..."
 Write-Host '¯\_(ツ)_/¯'
@@ -44,4 +44,5 @@ Function WhatsMyIP{
 Function gimme {
     (Get-History).CommandLine | Out-GridView
 }
-Write-Host "Profile loaded"
+Write-Host "---------------------"
+Write-Host "Profile loaded!" -ForegroundColor Green 
