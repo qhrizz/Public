@@ -16,6 +16,7 @@ $availableFunctions = @{
 "Set-MailboxPermission" = "Add mailboxpermissions for a user on a mailbox"
 "Delete-MailboxPermission" = "Remove mailboxpermissions for a user on a mailbox"
 "Get-MboxPermissions " = "List mailboxpermissions in a more sanitized way"
+"Get-GeoJSIp" = "Get country for IP address"
 } 
 $availableFunctions.GetEnumerator() | Sort-Object -Property name 
 
