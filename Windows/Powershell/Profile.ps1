@@ -1,5 +1,5 @@
 # This is my Powershell profile
-Write-Host "Loading powershell profile from qhrizz's Github Gist" -Foregroundcolor Green
+Write-Host "Loading powershell profile from qhrizz's Github" -Foregroundcolor Green
 Write-Host "Provided as is..."
 Write-Host "¯\_(ツ)_/¯"
 Write-Host "---------------------"
@@ -10,8 +10,23 @@ Import-Module posh-git
 Import-Module oh-my-posh
 Set-PoshPrompt -Theme slimfat
 
-
-
+# Mock function to test if the profile has loaded
+Function Invoke-Hello {
+    Write-Host "Hello $ENV:USERNAME"
+    Write-Host "Todays date: $(Get-Date -Format ("yyyy-MM-dd"))"
+    Write-Host "The time is $(Get-Date -Format ("HH:mm:ss"))"
+    }
+    
+# Function to load Microsoft 365 profile
+Function Invoke-M365Profile {
+    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/qhrizz/Public/master/Windows/Powershell/M365Profile.ps1'))
+}
+# Get current WAN address
+Function WhatsMyIP{
+    Invoke-WebRequest -Uri http://checkip.amazonaws.com/ | Select-String "[0-9]{0,3}.[0-9]{0,3}.[0-9]{0,3}.[0-9]{0,3}" | ForEach-Object {$_ -replace ("\n","")}
+    }
+# Show history of commands
+Function gimme {
+    (Get-History).CommandLine | Out-GridView
+}
 Write-Host "Profile loaded"
-
-Invoke-Webrequest -Uri "https://gist.githubusercontent.com/qhrizz/541f8a067fe8ec3869986949fccaa5d1/raw/ce187450ba5c69b91860d3f77ca9c96aa40dd59b/gistfile1.txt" -UseBasicParsing -OutFile C:\Temp\ps-profile.ps1 | Invoke-Expression C:\temp\ps-profile.ps1
