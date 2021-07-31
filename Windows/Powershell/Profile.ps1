@@ -10,7 +10,6 @@ Import-Module posh-git
 Import-Module oh-my-posh
 Set-PoshPrompt -Theme slimfat
 
-<<<<<<< HEAD
 # Mock function to test if the profile has loaded
 Function Invoke-Hello {
     Write-Host "Hello $ENV:USERNAME"
@@ -31,14 +30,3 @@ Function gimme {
     (Get-History).CommandLine | Out-GridView
 }
 Write-Host "Profile loaded"
-=======
-
-# Test function 
-Function Invoke-Hello {
-Write-Host "Hello $ENV:USERNAME"
-Write-Host "Todays date is $date"
-}
-
-
-Write-Host "Profile loaded" -Foregroundcolor Green
->>>>>>> d724d9733710623d7b079c34c6d75ae5371f566b
