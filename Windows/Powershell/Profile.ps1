@@ -111,5 +111,30 @@ Function Get-MboxPermissions {
 Get-MailboxPermission -Identity $Mailbox | Select-Object User,Accessrights
 
 }
+# Geoip function
+Function Get-GeoJSIp {
+    Param(
+        [Parameter(Mandatory=$true)]
+        [AllowEmptyString()]
+        [string]$ip
+    )
+    try{
+        # Remove any "ports" from IP
+        $cleanIP = ($ip | Select-String -Pattern "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}").Matches.Value
+        if($null -eq $cleanIP){
+            # No IP
+            $data = "no ip"
+            return $data
+        }
+        else{
+        $uri = "https://get.geojs.io/v1/ip/country/" + "$cleanIP" + ".json"
+        $data = Invoke-RestMethod -Uri $uri
+        return $data
+        }
+    }
+    catch{
+        throw $_.Exception.Message
+    }
+}
 Write-Host "---------------------"
 Write-Host "Profile loaded!" -ForegroundColor Green 
