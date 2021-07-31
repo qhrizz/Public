@@ -21,7 +21,7 @@ $availableFunctions.GetEnumerator() | Sort-Object -Property name
 
 # List available functions again
 Function Get-Functions {
-    $availableFunctions
+    $availableFunctions.GetEnumerator() | Sort-Object -Property name 
 }
 
 
