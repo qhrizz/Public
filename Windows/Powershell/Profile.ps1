@@ -1,7 +1,7 @@
 # This is my Powershell profile
 Write-Host "Loading powershell profile from qhrizz's Github Gist" -Foregroundcolor Green
 Write-Host "Provided as is..."
-# Write-Host '¯\_(ツ)_/¯'
+Write-Host '¯\_(ツ)_/¯'
 Write-Host "---------------------"
 
 
