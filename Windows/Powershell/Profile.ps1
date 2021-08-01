@@ -156,5 +156,9 @@ choco install microsoft-windows-terminal -y
 Write-Host $text -ForegroundColor Green
 }
 Write-Host "---------------------"
-Write-Host "Profile loaded!" -ForegroundColor Green 
-Write-Host "ヽ(°◇° )ノ " # Print dancing ASCII art :)
+$endText = @"
+Profile loaded!
+ヽ(°◇° )ノ 
+"@
+
+Write-Host $endText -ForegroundColor Green
