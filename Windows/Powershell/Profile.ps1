@@ -1,12 +1,10 @@
 # This is my Powershell profile hosted at Github
-Write-Host "Loading powershell profile from qhrizz's Github" -Foregroundcolor Green
-Write-Host "Provided as is...¯"
-Write-Host @"
-( •_•)
-( •_•)>⌐■-■
-(⌐■_■)
-"@ # Print ASCII art Yeeeaaahhh
-Write-Host "Available functions are (list again with Get-Functions)" 
+$introText = @"
+■ Loading Powershell profile from Github
+■ Provided as is...(っ▀¯▀)つ 
+"@
+Write-Host $introText -ForegroundColor Green
+Write-Host "Available functions are (list again with Get-Functions)"  -ForegroundColor Yellow
 # Hashtable to populate available functions
 $availableFunctions = @{
 "Invoke-Hello" = "Mock function to test if the profile was loaded"
@@ -34,7 +32,7 @@ Import-Module oh-my-posh
 Set-PoshPrompt -Theme slimfat
 
 <#
-Generic functions
+Generic functions. A mix of everything and nothing
 #>
 
 # Mock function to test if the profile has loaded
