@@ -1,9 +1,11 @@
 # This is my Powershell profile hosted at Github
 Write-Host "Loading powershell profile from qhrizz's Github" -Foregroundcolor Green
-Write-Host "Provided as is..."
-Write-Host '¯\_(ツ)_/¯'
-Write-Host "---------------------"
-
+Write-Host "Provided as is...¯"
+Write-Host @"
+( •_•)
+( •_•)>⌐■-■
+(⌐■_■)
+"@ # Print ASCII art Yeeeaaahhh
 Write-Host "Available functions are (list again with Get-Functions)" 
 # Hashtable to populate available functions
 $availableFunctions = @{
@@ -157,3 +159,4 @@ Write-Host $text -ForegroundColor Green
 }
 Write-Host "---------------------"
 Write-Host "Profile loaded!" -ForegroundColor Green 
+Write-Host "ヽ(°◇° )ノ " # Print dancing ASCII art :)
