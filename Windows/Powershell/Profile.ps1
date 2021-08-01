@@ -3,7 +3,7 @@ $introText = @"
 ■ Loading Powershell profile from Github
 ■ Provided as is...(っ▀¯▀)つ 
 "@
-Write-Host $introText -ForegroundColor Green
+Write-Host $introText -ForegroundColor Green # Print introtext and Stunna Shades ASCII Art :) 
 Write-Host "Available functions are (list again with Get-Functions)"  -ForegroundColor Yellow
 # Hashtable to populate available functions
 $availableFunctions = @{
