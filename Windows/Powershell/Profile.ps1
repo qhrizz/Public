@@ -17,6 +17,7 @@ $availableFunctions = @{
 "Delete-MailboxPermission" = "Remove mailboxpermissions for a user on a mailbox"
 "Get-MboxPermissions " = "List mailboxpermissions in a more sanitized way"
 "Get-GeoJSIp" = "Get country for IP address"
+"Install-Chocolatey" = "Install Chocolatey"
 } 
 $availableFunctions.GetEnumerator() | Sort-Object -Property name 
 
@@ -56,8 +57,8 @@ Microsoft 365 related functions
 #>
 Function Install-M365Modules {
     # Request administrative privileges
-    ## Install Azure AD v2 Module (Also a replacement for the old MSOL module) and ExchangeOnlineManagement Module
-    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -Command `"Install-Module -Name AzureAD;Install-Module -Name ExchangeOnlineManagement;"` -Verb RunAs }
+    ## Install Azure AD v2 Preview Module (Also a replacement for the old MSOL module) and ExchangeOnlineManagement Module
+    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -Command `"Install-Module -Name AzureADPreview;Install-Module -Name ExchangeOnlineManagement;"` -Verb RunAs }
     Write-Host "Complete. You may now close this window"
 }
 # Function to begin the authentication process against AzureAD and Exchange online
@@ -136,6 +137,24 @@ Function Get-GeoJSIp {
     catch{
         throw $_.Exception.Message
     }
+}
+
+Function Install-Chocolatey {
+    Write-Host "Installing Chocolatey. Requires elevation! "
+    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -Command `"Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"` -Verb RunAs }
+    $text = @"
+Things you can install:
+choco install firefox -y
+choco install googlechrome -y
+choco install 7zip.install -y
+choco install notepadplusplus.install -y
+choco install git.install -y
+choco install vscode -y
+choco install putty -y
+choco install powershell-core -y
+choco install microsoft-windows-terminal -y
+"@
+Write-Host $text -ForegroundColor Green
 }
 Write-Host "---------------------"
 Write-Host "Profile loaded!" -ForegroundColor Green 
