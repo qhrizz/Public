@@ -155,6 +155,10 @@ choco install microsoft-windows-terminal -y
 "@
 Write-Host $text -ForegroundColor Green
 }
+
+# Set Autocomplete menu 
+Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete 
+
 Write-Host "---------------------"
 $endText = @"
 Profile loaded!
