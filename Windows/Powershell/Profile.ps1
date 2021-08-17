@@ -61,13 +61,13 @@ Function Install-M365Modules {
 }
 # Function to begin the authentication process against AzureAD and Exchange online
 Function Connect-M365 {
-    Import-Module AzureAD
+    Import-Module AzureADPreview -UseWindowsPowerShell
     Import-Module ExchangeOnlineManagement
     Write-Host "You will be prompted two times for credentials..." -ForegroundColor Yellow
     # Connect to AzureAD
     try {
         Connect-AzureAD -ErrorAction Stop 6>$null
-        Write-Host "Successfully connected to Exchange Online"
+        Write-Host "Successfully connected to AzureAD Online"
     }
     catch {
         throw $_.Exception.Message
