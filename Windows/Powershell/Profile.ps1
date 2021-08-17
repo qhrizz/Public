@@ -62,7 +62,7 @@ Function Install-M365Modules {
 }
 # Function to begin the authentication process against AzureAD and Exchange online
 Function Connect-M365 {
-    Import-Module AzureAD
+    Import-Module AzureADPreview
     Import-Module ExchangeOnlineManagement
     Write-Host "You will be prompted two times for credentials..." -ForegroundColor Yellow
     # Connect to AzureAD
