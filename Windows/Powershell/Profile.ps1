@@ -57,8 +57,7 @@ Microsoft 365 related functions
 Function Install-M365Modules {
     # Request administrative privileges
     ## Install Azure AD v2 Preview Module (Also a replacement for the old MSOL module) and ExchangeOnlineManagement Module
-    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -Command `"Install-Module -Name AzureADPreview;Install-Module -Name ExchangeOnlineManagement;"` -Verb RunAs }
-    Write-Host "Complete. You may now close this window"
+    if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -Command `"Uninstall-Module -Name AzureAD;Install-Module -Name AzureADPreview -Scope AllUsers -v;Install-Module -Name ExchangeOnlineManagement -Scope AllUsers -v;pause"` -Verb RunAs }
 }
 # Function to begin the authentication process against AzureAD and Exchange online
 Function Connect-M365 {
@@ -108,7 +107,6 @@ Function Get-MboxPermissions {
     param(
         [string]$Mailbox
         )
-
 Get-MailboxPermission -Identity $Mailbox | Select-Object User,Accessrights
 
 }
