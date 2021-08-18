@@ -12,8 +12,8 @@ $availableFunctions = @{
 "gimme" = "List last used commands"
 "Install-M365Modules" = "Installs require modules"
 "Connect-M365" = "Connect to M365 with modern authentication"
-"Set-MailboxPermission" = "Add mailboxpermissions for a user on a mailbox"
-"Delete-MailboxPermission" = "Remove mailboxpermissions for a user on a mailbox"
+"Set-MboxPermission" = "Add mailboxpermissions for a user on a mailbox"
+"Remove-MboxPermission" = "Remove mailboxpermissions for a user on a mailbox"
 "Get-MboxPermissions " = "List mailboxpermissions in a more sanitized way"
 "Get-GeoJSIp" = "Get country for IP address"
 "Install-Chocolatey" = "Install Chocolatey"
@@ -85,8 +85,8 @@ Function Connect-M365 {
             throw $_.Exception.Message
             }
 }
-Function Set-MailboxPermission {
-    #Funktion f�r att l�gga p� mailboxbeh�righeter. Input $user = anv�ndaren och $mailbox = delade mailboxen.
+# Function to add mailboxpermissions for a user on a mailbox. 
+Function Set-MboxPermission {
     param(
         [string]$User,
         [string]$Mailbox
@@ -97,7 +97,7 @@ Function Set-MailboxPermission {
     Add-RecipientPermission -Identity $Mailbox -AccessRights SendAs -Trustee $User -Confirm:$false
         }
 # Remove mailbox permission (Unapproved verb as to not collide with the existing Remove-MailboxPermissions)
-Function Delete-MailboxPermission {
+Function Remove-MboxPermission {
 param(
     [string]$User,
     [string]$Mailbox
