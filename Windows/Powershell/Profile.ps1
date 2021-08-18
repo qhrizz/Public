@@ -82,8 +82,8 @@ Function Connect-M365 {
             throw $_.Exception.Message
             }
 }
-Function Set-MailboxPermission {
-    #Funktion f�r att l�gga p� mailboxbeh�righeter. Input $user = anv�ndaren och $mailbox = delade mailboxen.
+# Function to add mailboxpermissions for a user on a mailbox. 
+Function Set-MboxPermission {
     param(
         [string]$User,
         [string]$Mailbox
@@ -94,7 +94,7 @@ Function Set-MailboxPermission {
     Add-RecipientPermission -Identity $Mailbox -AccessRights SendAs -Trustee $User -Confirm:$false
         }
 # Remove mailbox permission (Unapproved verb as to not collide with the existing Remove-MailboxPermissions)
-Function Delete-MailboxPermission {
+Function Remove-MboxPermission {
 param(
     [string]$User,
     [string]$Mailbox
