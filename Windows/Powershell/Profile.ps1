@@ -17,6 +17,9 @@ $availableFunctions = @{
 "Get-MboxPermissions " = "List mailboxpermissions in a more sanitized way"
 "Get-GeoJSIp" = "Get country for IP address"
 "Install-Chocolatey" = "Install Chocolatey"
+"Stop-WSL" = "Stop a WSL instance"
+"Start-WSL" = "Start a WSL instance"
+"Get-WSLRunning" = "List running WSL instances"
 } 
 $availableFunctions.GetEnumerator() | Sort-Object -Property name 
 
@@ -152,6 +155,25 @@ choco install powershell-core -y
 choco install microsoft-windows-terminal -y
 "@
 Write-Host $text -ForegroundColor Green
+}
+
+# Functions to manage WSL instances
+Function Stop-WSL {
+    param(
+        [string]$instance
+    )
+    wsl --terminate $instance
+}
+
+Function Start-WSL {
+    param(
+        [string]$instance
+    )
+    wsl -d $instance
+}
+
+Function Get-WSLRunning {
+    wsl --list --running
 }
 
 # Set Autocomplete menu 
