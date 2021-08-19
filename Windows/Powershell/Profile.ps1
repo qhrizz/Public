@@ -156,7 +156,7 @@ choco install microsoft-windows-terminal -y
 "@
 Write-Host $text -ForegroundColor Green
 }
-
+# Stop WSL instance
 # Functions to manage WSL instances
 Function Stop-WSL {
     param(
@@ -164,17 +164,22 @@ Function Stop-WSL {
     )
     wsl --terminate $instance
 }
-
+# Start a WSL instance
 Function Start-WSL {
     param(
         [string]$instance
     )
     wsl -d $instance
 }
-
+# List all running instances
 Function Get-WSLRunning {
-    wsl --list --running
+    wsl --list --running --quiet
 }
+# List all instances
+Function Get-WSLInstances {
+    wsl --list --quiet
+}
+
 
 # Set Autocomplete menu 
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete 
