@@ -203,7 +203,7 @@ Function Get-WSLRunning {
 }
 # List all instances
 Function Get-WSLInstances {
-    wsl --list --quiet
+    wsl -l -v
 }
 
 
