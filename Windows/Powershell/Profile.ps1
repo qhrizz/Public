@@ -20,6 +20,8 @@ $availableFunctions = @{
     "Stop-WSL"              = "Stop a WSL instance"
     "Start-WSL"             = "Start a WSL instance"
     "Get-WSLRunning"        = "List running WSL instances"
+    "ConvertTo-Base64"      = "Encode text to base64"
+    "ConvertFrom-Base64"    = "Decode text from base64"
 } 
 $availableFunctions.GetEnumerator() | Sort-Object -Property name 
 
@@ -206,6 +208,23 @@ Function Get-WSLInstances {
     wsl -l -v
 }
 
+Function ConvertTo-Base64 {
+    Param(
+        [string]$text
+    )
+    # Convert to Bytes
+    $Bytes = [System.Text.Encoding]::Unicode.GetBytes($text)
+    # Convert to Base64
+    [Convert]::ToBase64String($Bytes)
+}
+
+Function ConvertFrom-Base64 {
+    Param(
+        [string]$encodedtext
+    )
+    # Revert from Base64 to Text
+    [System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($EncodedText))
+}
 
 # Set Autocomplete menu 
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete 
