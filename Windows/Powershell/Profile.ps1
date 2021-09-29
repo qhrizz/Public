@@ -12,7 +12,7 @@ $availableFunctions = @{
     "gimme"                 = "List last used commands"
     "Install-M365Modules"   = "Installs require modules"
     "Connect-M365"          = "Connect to M365 with modern authentication"
-    "Set-MboxPermission"    = "Add mailboxpermissions for a user on a mailbox"
+    "Add-MboxPermission"    = "Add mailboxpermissions for a user on a mailbox"
     "Remove-MboxPermission" = "Remove mailboxpermissions for a user on a mailbox"
     "Get-MboxPermissions "  = "List mailboxpermissions in a more sanitized way"
     "Get-GeoJSIp"           = "Get country for IP address"
@@ -105,7 +105,7 @@ Function Connect-M365 {
     }
 }
 # Function to add mailboxpermissions for a user on a mailbox. 
-Function Set-MboxPermission {
+Function Add-MboxPermission {
     param(
         [string]$User,
         [string]$Mailbox
@@ -129,7 +129,7 @@ Function Get-MboxPermissions {
     param(
         [string]$Mailbox
     )
-    Get-MailboxPermission -Identity $Mailbox | Select-String "@" | Select-Object User, Accessrights
+    (Get-MailboxPermission -Identity $Mailbox).User | Select-String "@"
 }
 # Geoip function
 Function Get-GeoJSIp {
