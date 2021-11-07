@@ -22,6 +22,7 @@ $availableFunctions = @{
     "Get-WSLRunning"        = "List running WSL instances"
     "ConvertTo-Base64"      = "Encode text to base64"
     "ConvertFrom-Base64"    = "Decode text from base64"
+    "Start-IntuneSync"      = "Trigger manual Intune Sync"
 } 
 $availableFunctions.GetEnumerator() | Sort-Object -Property name 
 
@@ -224,6 +225,23 @@ Function ConvertFrom-Base64 {
     )
     # Revert from Base64 to Text
     [System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($EncodedText))
+}
+
+# Function to trigger Intune sync from a client manually. This simply triggers the scheduled task that is installed when enrolling. 
+Function Start-IntuneSync {
+    Write-Host "Triggering Intune Sync via Scheduled Task"
+    
+    try {
+        if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { 
+            Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -Command `"Get-ScheduledTask | Where-Object {$_.TaskName -eq 'PushLaunch'} | Start-ScheduledTask -Verbose"` -Verb RunAs 
+        }
+        else {
+            Get-ScheduledTask | Where-Object {$_.TaskName -eq 'PushLaunch'} | Start-ScheduledTask -Verbose
+        }
+    }
+    catch {
+        throw $_.Exception.Message
+    }
 }
 
 # Set Autocomplete menu 
