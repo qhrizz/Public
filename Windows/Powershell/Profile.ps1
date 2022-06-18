@@ -34,9 +34,10 @@ Function Get-Functions {
 
 
 # Set oh-my-posh theme
-Import-Module posh-git
-Import-Module oh-my-posh
-Set-PoshPrompt -Theme slimfat
+#Import-Module posh-git
+#Import-Module oh-my-posh
+#Set-PoshPrompt -Theme slimfat
+oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\slimfat.omp.json" | Invoke-Expression
 
 <#
 Generic functions. A mix of everything and nothing
