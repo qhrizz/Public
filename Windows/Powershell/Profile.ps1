@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # This is my Powershell profile hosted at Github
 $introText = @"
 ■ Loading Powershell profile from Github
@@ -33,7 +32,7 @@ Function Get-Functions {
     $availableFunctions.GetEnumerator() | Sort-Object -Property name 
 }
 
-
+ 
 # Set oh-my-posh theme
 #Import-Module posh-git
 #Import-Module oh-my-posh
@@ -352,7 +351,6 @@ Profile loaded!
 "@
 
 Write-Host $endText -ForegroundColor Green
-=======
 # This is my Powershell profile hosted at Github
 $introText = @"
 ■ Loading Powershell profile from Github
@@ -845,4 +843,3 @@ Profile loaded!
 "@
 
 Write-Host $endText -ForegroundColor Green
->>>>>>> b257d89 (Updated stuff)
