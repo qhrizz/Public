@@ -24,7 +24,7 @@ $availableFunctions = @{
     "ConvertFrom-Base64"    = "Decode text from base64"
     "Start-IntuneSync"      = "Trigger manual Intune Sync"
     "New-IsoFile"           = "Add files to an ISO"
-    "New-SWRandomPassword"  = "Create random password, New-SWRandomPassword -MinPasswordLength 15 -MaxPasswordLength 15 -Count 1"
+    "New-Password"  = "Create a memorable password"
 } 
 $availableFunctions.GetEnumerator() | Sort-Object -Property name 
 
@@ -342,144 +342,138 @@ public class ISOFile
     } 
 } 
   
-function New-SWRandomPassword {
+Function New-Password {
     <#
-    .Synopsis
-       Generates one or more complex passwords designed to fulfill the requirements for Active Directory
-    .DESCRIPTION
-       Generates one or more complex passwords designed to fulfill the requirements for Active Directory
-    .EXAMPLE
-       New-SWRandomPassword
-       C&3SX6Kn
-
-       Will generate one password with a length between 8  and 12 chars.
-    .EXAMPLE
-       New-SWRandomPassword -MinPasswordLength 8 -MaxPasswordLength 12 -Count 4
-       7d&5cnaB
-       !Bh776T"Fw
-       9"C"RxKcY
-       %mtM7#9LQ9h
-
-       Will generate four passwords, each with a length of between 8 and 12 chars.
-    .EXAMPLE
-       New-SWRandomPassword -InputStrings abc, ABC, 123 -PasswordLength 4
-       3ABa
-
-       Generates a password with a length of 4 containing atleast one char from each InputString
-    .EXAMPLE
-       New-SWRandomPassword -InputStrings abc, ABC, 123 -PasswordLength 4 -FirstChar abcdefghijkmnpqrstuvwxyzABCEFGHJKLMNPQRSTUVWXYZ
-       3ABa
-
-       Generates a password with a length of 4 containing atleast one char from each InputString that will start with a letter from 
-       the string specified with the parameter FirstChar
-    .OUTPUTS
-       [String]
+    .SYNOPSIS
+        "Memorable" password generator for quick passwords
+        Logic from https://thesysadminchannel.com/simple-random-password-generator-using-powershell but modified to use 1Passwords wordlist and adding upper character words 
+     
     .NOTES
-       Written by Simon Wåhlin, blog.simonw.se
-       I take no responsibility for any issues caused by this script.
-    .FUNCTIONALITY
-       Generates random passwords
+        Name: New-Password
+        Author: Christian Tamm
+        Version: 1.0
+        DateCreated: 2022-12-30
+     
     .LINK
-       http://blog.simonw.se/powershell-generating-random-password-for-active-directory/
-   
+        https://thesysadminchannel.com/simple-random-password-generator-using-powershell 
+     
+    .EXAMPLE
+        New-Password
+        New-Password -WordCount 5
     #>
-    [CmdletBinding(DefaultParameterSetName='FixedLength',ConfirmImpact='None')]
-    [OutputType([String])]
-    Param
-    (
-        # Specifies minimum password length
-        [Parameter(Mandatory=$false,
-                   ParameterSetName='RandomLength')]
-        [ValidateScript({$_ -gt 0})]
-        [Alias('Min')] 
-        [int]$MinPasswordLength = 8,
-        
-        # Specifies maximum password length
-        [Parameter(Mandatory=$false,
-                   ParameterSetName='RandomLength')]
-        [ValidateScript({
-                if($_ -ge $MinPasswordLength){$true}
-                else{Throw 'Max value cannot be lesser than min value.'}})]
-        [Alias('Max')]
-        [int]$MaxPasswordLength = 12,
-
-        # Specifies a fixed password length
-        [Parameter(Mandatory=$false,
-                   ParameterSetName='FixedLength')]
-        [ValidateRange(1,2147483647)]
-        [int]$PasswordLength = 8,
-        
-        # Specifies an array of strings containing charactergroups from which the password will be generated.
-        # At least one char from each group (string) will be used.
-        [String[]]$InputStrings = @('abcdefghijkmnpqrstuvwxyz', 'ABCEFGHJKLMNPQRSTUVWXYZ', '23456789', '!#%&'),
-
-        # Specifies a string containing a character group from which the first character in the password will be generated.
-        # Useful for systems which requires first char in password to be alphabetic.
-        [String] $FirstChar,
-        
-        # Specifies number of passwords to generate.
-        [ValidateRange(1,2147483647)]
-        [int]$Count = 1
+    
+    param(
+        [Parameter(
+            Mandatory = $false
+        )]
+        [ValidateRange(2, 20)]
+        [int]   $WordCount = 3,
+        [switch]$setClipBoard
     )
-    Begin {
-        Function Get-Seed{
-            # Generate a seed for randomization
-            $RandomBytes = New-Object -TypeName 'System.Byte[]' 4
-            $Random = New-Object -TypeName 'System.Security.Cryptography.RNGCryptoServiceProvider'
-            $Random.GetBytes($RandomBytes)
-            [BitConverter]::ToUInt32($RandomBytes, 0)
-        }
+     
+     
+    BEGIN {
+        $SpecialCharacters = @((33, 35) + (36..38) + (40..42) + (60..62) + (64))
+        $Numbers = @(1..100)
     }
-    Process {
-        For($iteration = 1;$iteration -le $Count; $iteration++){
-            $Password = @{}
-            # Create char arrays containing groups of possible chars
-            [char[][]]$CharGroups = $InputStrings
+     
+    PROCESS {
+        try {
+            # Fetch wordlist from 1Password
+            $Site = Invoke-WebRequest -Uri 'https://1password.com/txt/agwordlist.txt'
+            $FullList = $Site.Content.Trim().split("`n")
+            
+            # Create a specific array depending on how many characters each word has                     
+            [System.Collections.ArrayList]$3LtrWord = @()
+            [System.Collections.ArrayList]$4LtrWord = @()
+            [System.Collections.ArrayList]$5LtrWord = @()
+            [System.Collections.ArrayList]$6LtrWord = @()
+            [System.Collections.ArrayList]$7LtrWord = @()
+            [System.Collections.ArrayList]$8LtrWord = @()
+            [System.Collections.ArrayList]$9LtrWord = @()
+     
+            # Add words to their respective list depending on length
+            foreach ($Word in $FullList) {
+                switch ($word.Length) {
+                    3 { $3LtrWord.Add($Word) | Out-Null }
+                    4 { $4LtrWord.Add($Word) | Out-Null }
+                    5 { $5LtrWord.Add($Word) | Out-Null }
+                    6 { $6LtrWord.Add($Word) | Out-Null }
+                    7 { $7LtrWord.Add($Word) | Out-Null }
+                    8 { $8LtrWord.Add($Word) | Out-Null }
+                    9 { $9LtrWord.Add($Word) | Out-Null }
+                }
+            }
+     
+            # Minimum 14 character password if we remove spaces and special characters
+            if ($WordCount -le 3) {
+                $WordList = $7LtrWord + $8LtrWord + $9LtrWord
+            }
+     
+            if ($WordCount -eq 4) {
+                $WordList = $4LtrWord + $5LtrWord + $6LtrWord + $7LtrWord
+            }
+     
+            if ($WordCount -eq 5) {
+                $WordList = $4LtrWord + $5LtrWord + $6LtrWord
+            }
+                 
+            if ($WordCount -ge 6) {
+                $WordList = $3LtrWord + $4LtrWord + $5LtrWord
+            }
 
-            # Create char array containing all chars
-            $AllChars = $CharGroups | ForEach-Object {[Char[]]$_}
+            # Get which words from the wordlist to use
+            [System.Collections.ArrayList]$passwordArray = @()
+            $i = 0
+            # While the counter is less than the wordCount specified, do
+            while ($i -lt $WordCount) {           
+                # Grab one random word from the list
+                $passPhrase = ($WordList | Get-Random -Count 1)
 
-            # Set password length
-            if($PSCmdlet.ParameterSetName -eq 'RandomLength')
-            {
-                if($MinPasswordLength -eq $MaxPasswordLength) {
-                    # If password length is set, use set length
-                    $PasswordLength = $MinPasswordLength
+                # Add word to the array
+                $passwordArray.Add($passPhrase) | Out-Null
+                $i++ | Out-Null
+            } 
+            # Create a new array and add logic to append number and specialcharacter
+            [System.Collections.ArrayList]$passwordArrayModify = @()
+            $SpecialCharacterAndNumber = $WordCount - 1
+            # remove 1 from wordcount to prevent it from blocking the last word from having numbers and special character added
+            $nrToUpper = Get-Random -Minimum 0 -Maximum ($WordCount - 1)                 
+            $i = 0
+            foreach ($word in $passwordArray) {
+                if ($i -eq $nrToUpper) {
+                    $word = $word.ToUpper()
+                    $passwordArrayModify.Add($word) | Out-Null
+                    $i++ | Out-Null
+                }
+                elseif ($i -match $SpecialCharacterAndNumber) {
+                    $word = $word + ([char]($SpecialCharacters | Get-Random -Count 1)) + ($Numbers | Get-Random -Count 1)
+                    $passwordArrayModify.Add($word) | Out-Null
+                    $i++ | Out-Null
                 }
                 else {
-                    # Otherwise randomize password length
-                    $PasswordLength = ((Get-Seed) % ($MaxPasswordLength + 1 - $MinPasswordLength)) + $MinPasswordLength
+                    $passwordArrayModify.Add($word) | Out-Null
+                    $i++ | Out-Null
                 }
             }
-
-            # If FirstChar is defined, randomize first char in password from that string.
-            if($PSBoundParameters.ContainsKey('FirstChar')){
-                $Password.Add(0,$FirstChar[((Get-Seed) % $FirstChar.Length)])
+            # print the new password
+            $newPassword = $passwordArrayModify -join "-"
+            if($setClipBoard -eq $true){
+                Set-Clipboard -Value $newPassword
+                Write-Host $newPassword -ForegroundColor Green
             }
-            # Randomize one char from each group
-            Foreach($Group in $CharGroups) {
-                if($Password.Count -lt $PasswordLength) {
-                    $Index = Get-Seed
-                    While ($Password.ContainsKey($Index)){
-                        $Index = Get-Seed                        
-                    }
-                    $Password.Add($Index,$Group[((Get-Seed) % $Group.Count)])
-                }
+            else{
+                Write-Host $newPassword -ForegroundColor Green
             }
-
-            # Fill out with chars from $AllChars
-            for($i=$Password.Count;$i -lt $PasswordLength;$i++) {
-                $Index = Get-Seed
-                While ($Password.ContainsKey($Index)){
-                    $Index = Get-Seed                        
-                }
-                $Password.Add($Index,$AllChars[((Get-Seed) % $AllChars.Count)])
-            }
-            Write-Output -InputObject $(-join ($Password.GetEnumerator() | Sort-Object -Property Name | Select-Object -ExpandProperty Value))
+        }
+        catch {
+            Write-Error $_.Exception.Message
         }
     }
+     
+    END {}
+     
 }
-
 
 # Set Autocomplete menu 
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete 
