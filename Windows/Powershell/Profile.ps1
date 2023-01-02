@@ -374,7 +374,7 @@ Function New-Password {
      
     BEGIN {
         $SpecialCharacters = @((33, 35) + (36..38) + (40..42) + (60..62) + (64))
-        $Numbers = @(1..100)
+        $Numbers = @(1..1000)
     }
      
     PROCESS {
@@ -436,8 +436,8 @@ Function New-Password {
             } 
             # Create a new array and add logic to append number and specialcharacter
             [System.Collections.ArrayList]$passwordArrayModify = @()
-            $SpecialCharacterAndNumber = $WordCount - 1
             # remove 1 from wordcount to prevent it from blocking the last word from having numbers and special character added
+            $SpecialCharacterAndNumber = $WordCount - 1            
             $nrToUpper = Get-Random -Minimum 0 -Maximum ($WordCount - 1)                 
             $i = 0
             foreach ($word in $passwordArray) {
