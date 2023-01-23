@@ -355,7 +355,6 @@ Function New-Password {
         DateCreated: 2022-12-30
 
         1.1: added clearing from clipboard (also doesnt show the password in console.)
-        Added clearing of the variable "newPassword"
      
     .LINK
         https://thesysadminchannel.com/simple-random-password-generator-using-powershell 
@@ -468,11 +467,9 @@ Function New-Password {
                     Start-Sleep -Seconds 1
                 }
                 $null | Set-Clipboard
-                Remove-Variable $newPassword
             }
             else{
                 Write-Host $newPassword -ForegroundColor Green
-                Remove-Variable $newPassword
             }
         }
         catch {
