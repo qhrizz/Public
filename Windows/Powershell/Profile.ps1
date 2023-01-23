@@ -351,8 +351,11 @@ Function New-Password {
     .NOTES
         Name: New-Password
         Author: Christian Tamm
-        Version: 1.0
+        Version: 1.1
         DateCreated: 2022-12-30
+
+        1.1: added clearing from clipboard (also doesnt show the password in console.)
+        Added clearing of the variable "newPassword"
      
     .LINK
         https://thesysadminchannel.com/simple-random-password-generator-using-powershell 
@@ -460,10 +463,16 @@ Function New-Password {
             $newPassword = $passwordArrayModify -join "-"
             if($setClipBoard -eq $true){
                 Set-Clipboard -Value $newPassword
-                Write-Host $newPassword -ForegroundColor Green
+                for ($i = 30; $i -ge 0; $i-- ) {
+                    Write-Progress -Activity "--- Clearing clipboard in..." -Status "$i seconds"
+                    Start-Sleep -Seconds 1
+                }
+                $null | Set-Clipboard
+                Remove-Variable $newPassword
             }
             else{
                 Write-Host $newPassword -ForegroundColor Green
+                Remove-Variable $newPassword
             }
         }
         catch {
@@ -474,6 +483,7 @@ Function New-Password {
     END {}
      
 }
+
 
 # Set Autocomplete menu 
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete 
