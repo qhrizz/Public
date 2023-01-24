@@ -351,17 +351,18 @@ Function New-Password {
     .NOTES
         Name: New-Password
         Author: Christian Tamm
-        Version: 1.1
+        Version: 1.2
         DateCreated: 2022-12-30
 
         1.1: added clearing from clipboard (also doesnt show the password in console.)
-     
+        1.2 added clearClipboard switch
     .LINK
         https://thesysadminchannel.com/simple-random-password-generator-using-powershell 
      
     .EXAMPLE
         New-Password
         New-Password -WordCount 5
+        New-Password -setClipboard -clearClipboard
     #>
     
     param(
@@ -370,7 +371,8 @@ Function New-Password {
         )]
         [ValidateRange(2, 20)]
         [int]   $WordCount = 3,
-        [switch]$setClipBoard
+        [switch]$setClipBoard,
+        [switch]$clearClipboard
     )
      
      
@@ -460,13 +462,16 @@ Function New-Password {
             }
             # print the new password
             $newPassword = $passwordArrayModify -join "-"
-            if($setClipBoard -eq $true){
+            if($setClipBoard -eq $true -and $clearClipboard -eq $true ){
                 Set-Clipboard -Value $newPassword
                 for ($i = 30; $i -ge 0; $i-- ) {
-                    Write-Progress -Activity "--- Clearing clipboard in..." -Status "$i seconds"
+                    Write-Progress -Activity "Clearing clipboard in..." -Status "$i seconds"
                     Start-Sleep -Seconds 1
                 }
                 $null | Set-Clipboard
+            }
+            elseif($setClipBoard -eq $true) {
+                Set-Clipboard -Value $newPassword
             }
             else{
                 Write-Host $newPassword -ForegroundColor Green
