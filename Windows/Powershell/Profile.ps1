@@ -17,9 +17,6 @@ $availableFunctions = @{
     "Get-MboxPermissions "  = "List mailboxpermissions in a more sanitized way"
     "Get-GeoJSIp"           = "Get country for IP address"
     "Install-Chocolatey"    = "Install Chocolatey"
-    "Stop-WSL"              = "Stop a WSL instance"
-    "Start-WSL"             = "Start a WSL instance"
-    "Get-WSLRunning"        = "List running WSL instances"
     "ConvertTo-Base64"      = "Encode text to base64"
     "ConvertFrom-Base64"    = "Decode text from base64"
     "Start-IntuneSync"      = "Trigger manual Intune Sync"
@@ -187,29 +184,6 @@ choco install microsoft-windows-terminal -y
     catch {
         throw $_.Exception.Message
     }
-}
-# Stop WSL instance
-# Functions to manage WSL instances
-Function Stop-WSL {
-    param(
-        [string]$instance
-    )
-    wsl --terminate $instance
-}
-# Start a WSL instance
-Function Start-WSL {
-    param(
-        [string]$instance
-    )
-    wsl -d $instance
-}
-# List all running instances
-Function Get-WSLRunning {
-    wsl --list --running --quiet
-}
-# List all instances
-Function Get-WSLInstances {
-    wsl -l -v
 }
 
 Function ConvertTo-Base64 {
