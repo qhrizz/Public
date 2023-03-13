@@ -22,6 +22,7 @@ $availableFunctions = @{
     "Start-IntuneSync"      = "Trigger manual Intune Sync"
     "New-IsoFile"           = "Add files to an ISO"
     "New-Password"  = "Create a memorable password"
+    "cOnVeRtTo-sPoNgEbOb" = "Spongebob meme text"
 } 
 $availableFunctions.GetEnumerator() | Sort-Object -Property name 
 
@@ -471,3 +472,40 @@ Profile loaded!
 "@
 
 Write-Host $endText -ForegroundColor Green
+
+
+# Function taken from https://www.reddit.com/r/PowerShell/comments/71lpdc/powershell_challenge_write_pester_tests_for_the/
+Function cOnVeRtTo-sPoNgEbOb
+{
+    [CmdletBinding()]
+    [Alias()]
+    [OutputType([string])]
+    Param
+    (
+        [Parameter(Position=0)]
+        $String
+    )
+
+    if($Null -eq $String) 
+    {
+        $String = ''
+    }
+    if($String.gettype().Name -ne 'String')
+    {
+        Write-Error 'You must provide a string to convert to Spongebob case.'
+    }
+    $SpongeString = ''
+    $Case = 'Lower'
+
+    $String.GetEnumerator() | ForEach-Object {
+        [string]$Char = $_
+        Switch($Case) {
+        'Lower' { $SpongeString += $Char.ToLower()
+                  $Case = 'Upper'}
+        'Upper' { $SpongeString += $Char.ToUpper()
+                  $Case = 'Lower'}
+        }  
+    }
+    #Output
+    $SpongeString
+}
