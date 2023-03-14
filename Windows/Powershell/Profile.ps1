@@ -483,7 +483,8 @@ Function cOnVeRtTo-sPoNgEbOb
     Param
     (
         [Parameter(Position=0)]
-        $String
+        $String,
+        [switch]$setClipBoard
     )
 
     if($Null -eq $String) 
@@ -507,5 +508,11 @@ Function cOnVeRtTo-sPoNgEbOb
         }  
     }
     #Output
-    $SpongeString
+    if($setClipBoard){
+        $SpongeString | Set-Clipboard
+    }
+    else{
+    $SpongeString 
+    }
+    
 }
