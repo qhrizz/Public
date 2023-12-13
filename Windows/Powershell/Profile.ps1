@@ -359,7 +359,8 @@ Function New-Password {
     PROCESS {
         try {
             # Fetch wordlist from 1Password
-            $Site = Invoke-WebRequest -Uri 'https://1password.com/txt/agwordlist.txt'
+            # $Site = Invoke-WebRequest -Uri 'https://1password.com/txt/agwordlist.txt'
+            $Site = Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/qhrizz/Public/master/agwordlist.txt'
             $FullList = $Site.Content.Trim().split("`n")
             
             # Create a specific array depending on how many characters each word has                     
