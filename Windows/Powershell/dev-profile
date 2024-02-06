@@ -8,10 +8,6 @@ Write-Host "Available functions are (list again with Get-Functions)"  -Foregroun
 $availableFunctions = @{
     "Invoke-Hello"          = "Mock function to test if the profile was loaded"
     "WhatsMyIP"             = "Check current WAN address using Amazon"
-    "gimme"                 = "List last used commands"
-    "Install-Chocolatey"    = "Install Chocolatey"
-    "ConvertTo-Base64"      = "Encode text to base64"
-    "ConvertFrom-Base64"    = "Decode text from base64"
     "Start-IntuneSync"      = "Trigger manual Intune Sync"
     "New-Password"  = "Create a memorable password"
     "cOnVeRtTo-sPoNgEbOb" = "Spongebob meme text"
@@ -25,11 +21,7 @@ Function Get-Functions {
 
  
 # Set oh-my-posh theme
-oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\stelbent.minimal.omp.json" | Invoke-Expression
-
-<#
-Generic functions. A mix of everything and nothing
-#>
+oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\kali.omp.json" | Invoke-Expression
 
 # Mock function to test if the profile has loaded
 Function Invoke-Hello {
@@ -40,53 +32,6 @@ Function Invoke-Hello {
 # Get current WAN address
 Function WhatsMyIP {
     Invoke-WebRequest -Uri http://checkip.amazonaws.com/ | Select-String "[0-9]{0,3}.[0-9]{0,3}.[0-9]{0,3}.[0-9]{0,3}" | ForEach-Object { $_ -replace ("\n", "") }
-}
-# Show history of commands
-Function gimme {
-    (Get-History).CommandLine | Out-GridView
-}
-Function Install-Chocolatey {
-    Write-Host "Installing Chocolatey. Requires elevation! "
-    try {
-        if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) { 
-            Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -Command `"Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))"` -Verb RunAs 
-        }
-        else {
-            Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-        }
-        $text = @"
-Things you can install:
-choco install 7zip.install -y
-choco install notepadplusplus.install -y
-choco install git.install -y
-choco install vscode -y
-choco install putty -y
-choco install powershell-core -y
-choco install microsoft-windows-terminal -y
-"@
-        Write-Host $text -ForegroundColor Green
-    }
-    catch {
-        throw $_.Exception.Message
-    }
-}
-
-Function ConvertTo-Base64 {
-    Param(
-        [string]$text
-    )
-    # Convert to Bytes
-    $Bytes = [System.Text.Encoding]::Unicode.GetBytes($text)
-    # Convert to Base64
-    [Convert]::ToBase64String($Bytes)
-}
-
-Function ConvertFrom-Base64 {
-    Param(
-        [string]$encodedtext
-    )
-    # Revert from Base64 to Text
-    [System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($EncodedText))
 }
 
 # Function to trigger Intune sync from a client manually. This simply triggers the scheduled task that is installed when enrolling. 
