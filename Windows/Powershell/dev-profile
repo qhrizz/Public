@@ -2,8 +2,8 @@
 $introText = @"
 Loading Powershell profile from Github
 "@
-Write-Host $introText -ForegroundColor Green # Print introtext and Stunna Shades ASCII Art :) 
-Write-Host "Available functions are (list again with Get-Functions)"  -ForegroundColor Yellow
+Write-Host $introText -ForegroundColor Green 
+
 # Hashtable to populate available functions
 $availableFunctions = @{
     "Invoke-Hello"          = "Mock function to test if the profile was loaded"
